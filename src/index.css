@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #0a0a0a;
+  color: rgb(231, 232, 235);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Navbar active links */
+.active {
+  border-bottom: 4px solid rgb(232 121 249);
+  border-radius: 4px;
+  color: rgb(250 232 255);
+}
+
+/* Speech bubble */
+.ai {
+  position: relative;
+  border-radius: 10px;
+}
+
+.ai:after {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 0;
+  z-index: 1;
+  border-style: solid;
+  border-width: 0 0 20px 20px;
+  border-color: transparent transparent #334155 transparent;
+  bottom: 0px;
+  left: -10px;
+}
+
+.user {
+  position: relative;
+  border-radius: 10px;
+}
+
+.user:after {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 0;
+  z-index: 1;
+  border-style: solid;
+  border-width: 20px 0 0 20px;
+  border-color: transparent transparent transparent #334155;
+  bottom: 0px;
+  right: -10px;
+}
+
+/* Auth pages backgrounds */
+.sprinkle {
+  background-image: url('/src/assets/contour.svg');
+}
+
+.polygon {
+  background-image: url('/src/assets/polygon.svg');
+  /* opacity: 85%; */
+}
+
+.flip {
+  transform: scaleX(-1);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
