@@ -41,13 +41,13 @@ const SignIn = () => {
 
       toast.success('Glad to have you back', {
         theme: 'dark',
-        autoClose: 4000,
+        autoClose: 3000,
       });
 
       setTimeout(() => {
         setEmail('');
         setPassword('');
-      }, 3000);
+      }, 4000);
 
       window.localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
@@ -56,6 +56,23 @@ const SignIn = () => {
       }, 5000);
     } catch (err) {
       console.log(err);
+      if (err.response.status === 500) {
+        toast.error(`${err.response.statusText}`, {
+          theme: 'dark',
+          autoClose: 6000,
+        });
+        setEmail('');
+        setPassword('');
+      }
+      if (err.response.status === 401) {
+        toast.error('Wrong credentials, try again', {
+          theme: 'dark',
+          autoClose: 6000,
+        });
+      }
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 

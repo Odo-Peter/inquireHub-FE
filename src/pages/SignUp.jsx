@@ -54,9 +54,9 @@ const SignUp = () => {
         navigate('/auth/sign_in');
       }, 7000);
     } catch (err) {
-      // console.log(err.response.data.error);
+      console.log(err.response);
       if (err.response.data.error === 'Duplicate Key') {
-        toast.error('Email already exist/taken', {
+        toast.error('This Email has being used', {
           theme: 'dark',
         });
       }

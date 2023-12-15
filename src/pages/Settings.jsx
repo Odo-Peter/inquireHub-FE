@@ -1,18 +1,37 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { LogOut, Settings as SettingsIcon, Smile } from 'lucide-react';
+import { toast } from 'react-toastify';
+
+import { Loader2, LogOut, Settings as SettingsIcon, Smile } from 'lucide-react';
 
 import Sidebar from '../components/Sidebar';
 import MobileSidebar from '../components/MobileSidebar';
 
 const Settings = () => {
   const [blur, setBlur] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
   const navigate = useNavigate();
 
   const handleLogout = (e) => {
     e.preventDefault();
-    console.log('clicked');
+    try {
+      setIsLoggingOut(true);
+      window.localStorage.removeItem('currentUser');
+    } catch (err) {
+      console.log(err);
+      setIsLoggingOut(false);
+    } finally {
+      toast.success('Hope to see you soon.', {
+        theme: 'dark',
+        autoClose: 4000,
+      });
+      setTimeout(() => {
+        setIsLoggingOut(false);
+        navigate('/auth/sign_in');
+      }, 5000);
+    }
   };
 
   return (
@@ -47,9 +66,21 @@ const Settings = () => {
 
         <button
           onClick={handleLogout}
-          className="absolute bottom-4 right-4 flex items-center gap-x-2 border-0 outline-none py-2 px-8 rounded-lg text-white bg-red-600 hover:bg-red-500"
+          className={
+            !isLoggingOut
+              ? 'absolute bottom-4 right-4 text-sm tracking-wide font-semibold flex items-center gap-x-2 border-0 outline-none py-2 px-8 rounded-lg text-white bg-red-600 hover:bg-red-500'
+              : 'absolute bottom-4 right-4 text-sm tracking-wide font-semibold flex items-center gap-x-2 border-0 outline-none py-2 px-8 rounded-lg text-white bg-red-500 cursor-not-allowed'
+          }
         >
-          Logout <LogOut className=" w-4 h-4" />{' '}
+          {isLoggingOut ? (
+            <>
+              Logging out... <Loader2 className=" w-4 h-4 animate-spin" />
+            </>
+          ) : (
+            <>
+              Logout <LogOut className=" w-4 h-4" />
+            </>
+          )}{' '}
         </button>
       </div>
     </section>
