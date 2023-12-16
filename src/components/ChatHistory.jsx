@@ -1,6 +1,6 @@
 import { HistoryIcon } from 'lucide-react';
 
-const ChatHistory = ({ handleDisplayChatHistory, isHistoryLoading }) => {
+const ChatHistory = ({ handleDisplayChatHistory }) => {
   return (
     <>
       <button

@@ -59,6 +59,16 @@ const SignUp = () => {
         toast.error('This Email has being used', {
           theme: 'dark',
         });
+        setEmail('');
+        setPassword('');
+      }
+      if (err.response.status === 500) {
+        toast.error('Check your network connection', {
+          theme: 'dark',
+          autoClose: 6000,
+        });
+        setEmail('');
+        setPassword('');
       }
       setIsLoading(false);
     } finally {

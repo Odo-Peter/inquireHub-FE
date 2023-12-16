@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Code as CodeIcon, Loader2, SendIcon } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 import { getAssistantResponseCode, setToken } from '../services/code';
 import { getUser } from '../services/users';
@@ -22,6 +23,7 @@ const Code = () => {
 
   const [immediateResponse, setImmediateResponse] = useState([]);
   const [message, setMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const currUser = window.localStorage.getItem('currentUser');
@@ -44,6 +46,12 @@ const Code = () => {
       setImmediateResponse([...immediateResponse, res]);
     } catch (err) {
       console.log(err);
+      if (err.response.status === 500) {
+        toast.error('Cannot connect to InquireHub', {
+          theme: 'dark',
+          autoClose: 6000,
+        });
+      }
       setIsLoading(false);
     } finally {
       setIsLoading(false);
@@ -63,6 +71,13 @@ const Code = () => {
       }
     } catch (err) {
       console.log(err);
+      if (err.response.status === 500) {
+        setErrorMessage('Please Check your network connection');
+        toast.error('Cannot get chat history', {
+          theme: 'dark',
+          autoClose: 6000,
+        });
+      }
       setIsHistoryLoading(false);
     } finally {
       setIsHistoryLoading(false);
@@ -124,7 +139,7 @@ const Code = () => {
           <button
             disabled={isLoading}
             type="submit"
-            className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 border-0 outline-none px-3 font-medium tracking-wide py-[5px] text-xs rounded-md bg-cyan-700 text-gray-100"
+            className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 border-0 outline-none px-3 font-medium tracking-wide py-[5px] text-xs rounded-md bg-green-700 text-gray-100"
           >
             {!isLoading ? (
               <SendIcon className="h-4 w-4" />
@@ -152,6 +167,7 @@ const Code = () => {
             messageArr={getHistoryMessages}
             isHistoryLoading={isHistoryLoading}
             textColor={'text-green-600'}
+            errorMessage={errorMessage}
           />
         )}
       </div>

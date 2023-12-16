@@ -37,7 +37,7 @@ const Navbar = () => {
       </div>
 
       <Link
-        to={'/auth/sign_up'}
+        to={'/auth/sign_in'}
         className="text-sm md:text-base bg-gradient-to-r from-pink-500 to-blue-500 px-8 lg:px-10 rounded-full text-white font-bold flex items-center py-[10px] hover:bg-gradient-to-r hover:from-blue-500 hover:to-pink-500 transition-all"
       >
         Get Started <ArrowRight className="text-white h-4 w-4 ml-3" />{' '}

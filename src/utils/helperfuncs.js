@@ -12,3 +12,5 @@ export const navigateBackToAuth = (ms, elem) => {
     timerLeft -= 1;
   }, 1000);
 };
+
+export const TOTAL_LIMIT = 2;

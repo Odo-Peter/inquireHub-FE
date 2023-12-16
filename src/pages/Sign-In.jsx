@@ -57,7 +57,7 @@ const SignIn = () => {
     } catch (err) {
       console.log(err);
       if (err.response.status === 500) {
-        toast.error(`${err.response.statusText}`, {
+        toast.error('Check your network connection', {
           theme: 'dark',
           autoClose: 6000,
         });

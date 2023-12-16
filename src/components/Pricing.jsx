@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 
-import { CheckCircle2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { pricing } from '../utils/pricing';
 
 const Pricing = () => {
   return (
-    <div className="mt-8 md:mt-0 w-full flex justify-center items-center gap-x-8 px-10 md:px-20 ">
+    <div className="mt-8 md:mt-0 w-full flex flex-col justify-center items-center gap-x-8 px-10 md:px-20 ">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
         {pricing.map((card) => (
           <div
@@ -37,6 +37,13 @@ const Pricing = () => {
           </div>
         ))}
       </div>
+      <Link
+        to={'/auth/sign_in'}
+        className="text-sm md:text-base bg-gradient-to-r w-[90%] md:w-[60%] lg:w-[50%] mt-40 md:mt-20 from-blue-500 to-pink-500 px-6 md:px-10 rounded-full text-white font-bold py-3 z-10 hover:bg-gradient-to-r flex items-center justify-center hover:from-pink-500 hover:to-cyan-500 transition-all tracking-wider"
+      >
+        Start using for FREE
+        <ArrowRight className="text-white h-4 w-4 ml-3" />{' '}
+      </Link>
     </div>
   );
 };

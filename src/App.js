@@ -6,10 +6,17 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { setToken } from './services/conversations';
 
-import { routesPath } from './utils/routesPath';
+import Landing from './pages/Landing';
+import SignUp from './pages/SignUp';
+import SignIn from './pages/Sign-In';
+import Home from './pages/Home';
+import Conversation from './pages/Conversation';
+import Article from './pages/Article';
+import Code from './pages/Code';
+import Settings from './pages/Settings';
 
 const App = () => {
-  const [, setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const currUser = window.localStorage.getItem('currentUser');
@@ -24,9 +31,14 @@ const App = () => {
   return (
     <main className="h-screen max-w-[1440px]">
       <Routes>
-        {routesPath.map((path) => (
-          <Route key={path.route} path={path.route} element={path.element} />
-        ))}
+        <Route path="/" element={!user ? <Landing /> : <Home />} />
+        <Route path="/feed" element={<Home />} />
+        <Route path="/auth/sign_up" element={<SignUp />} />
+        <Route path="/auth/sign_in" element={<SignIn />} />
+        <Route path="/feed/conversation" element={<Conversation />} />
+        <Route path="/feed/article" element={<Article />} />
+        <Route path="/feed/code" element={<Code />} />
+        <Route path="/feed/settings" element={<Settings />} />
       </Routes>
       <ToastContainer />
     </main>

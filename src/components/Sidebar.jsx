@@ -5,9 +5,12 @@ import { Line } from 'rc-progress';
 import { sideBarLinks } from '../utils/navlinks';
 import { Zap } from 'lucide-react';
 
-const Sidebar = ({ currentPage }) => {
-  const percentChanged = 40;
-
+const Sidebar = ({
+  currentPage,
+  handleProModal,
+  percentChanged,
+  rateLimit,
+}) => {
   return (
     <div className="hidden fixed top-0 left-0 md:flex flex-col h-full w-72 px-4 border-r border-gray-800 py-10 gap-y-12">
       <div className="flex flex-col items-center gap-y-2">
@@ -52,11 +55,14 @@ const Sidebar = ({ currentPage }) => {
             strokeColor="rgb(212, 56, 236)"
             trailColor="#979393"
           />
-          <p className="text-sm font-medium text-gray-300">
-            Free usage: 10 / 20
+          <p className="text-sm flex items-center gap-x-2 font-medium text-gray-300">
+            Free usage: {rateLimit} / 2
           </p>
         </div>
-        <button className="border-0 outline-none bg-gradient-to-r from-blue-500 to-pink-500 text-white text-sm font-semibold flex items-center gap-2 py-2 w-full justify-center rounded-full hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500 transition-all">
+        <button
+          onClick={handleProModal}
+          className="border-0 outline-none bg-gradient-to-r from-blue-500 to-pink-500 text-white text-sm font-semibold flex items-center gap-2 py-2 w-full justify-center rounded-full hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500 transition-all"
+        >
           Subscribe to Pro <Zap className="h-4 w-4 fill-yellow-500" />{' '}
         </button>
       </div>

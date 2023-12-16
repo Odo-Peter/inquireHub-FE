@@ -12,7 +12,7 @@ const LandingHero = () => {
           Discover the Power of AI-Powered Conversations
         </h1>
         <Link
-          to={'/auth/sign_up'}
+          to={'/auth/sign_in'}
           className="text-sm md:text-base bg-gradient-to-r w-[90%] md:w-[60%] lg:w-[50%] mt-40 md:mt-24 from-blue-500 to-pink-500 px-6 md:px-10 rounded-full text-white font-bold py-3 z-10 hover:bg-gradient-to-r flex items-center justify-center hover:from-pink-500 hover:to-cyan-500 transition-all tracking-wider"
         >
           Start a Conversation <Rocket className="text-white h-4 w-4 ml-3" />

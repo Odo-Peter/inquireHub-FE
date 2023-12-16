@@ -1,27 +1,35 @@
 import { useEffect, useState } from 'react';
 
 import { Loader2, MessageSquare, SendIcon } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 import { getUser } from '../services/users';
 import { getAssistantResponse, setToken } from '../services/conversations';
+
+import { TOTAL_LIMIT } from '../utils/helperfuncs';
 
 import Sidebar from '../components/Sidebar';
 import MobileSideBar from '../components/MobileSidebar';
 import ChatBubble from '../components/ChatBubble';
 import HistoryBubble from '../components/HistoryBubble';
 import ChatHistory from '../components/ChatHistory';
+import ProModal from '../components/ProModal';
 
 const Conversation = () => {
   const [blur, setBlur] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [getHistory, setGetHistory] = useState(false);
   const [isHistoryLoading, setIsHistoryLoading] = useState(false);
+  const [proModal, setProModal] = useState(false);
 
   const [user, setUser] = useState(null);
   const [getHistoryMessages, setGetHistoryMessages] = useState(null);
 
   const [immediateResponse, setImmediateResponse] = useState([]);
+
   const [message, setMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [rateLimit, setRateLimit] = useState(0);
 
   useEffect(() => {
     const currUser = window.localStorage.getItem('currentUser');
@@ -41,9 +49,21 @@ const Conversation = () => {
     try {
       setIsLoading(true);
       const res = await getAssistantResponse({ message });
+      const userRateLimit = user ? await getUser(user?.id) : null;
+
       setImmediateResponse([...immediateResponse, res]);
+      setRateLimit(userRateLimit?.rateLimit);
     } catch (err) {
       console.log(err);
+      if (err.response.status === 500) {
+        toast.error('Cannot connect to InquireHub', {
+          theme: 'dark',
+          autoClose: 6000,
+        });
+      }
+      if (err.response.status === 429) {
+        setProModal(true);
+      }
       setIsLoading(false);
     } finally {
       setIsLoading(false);
@@ -53,7 +73,6 @@ const Conversation = () => {
 
   const handleDisplayChatHistory = async () => {
     setGetHistory(true);
-    console.log('Take me to history');
 
     try {
       setIsHistoryLoading(true);
@@ -62,13 +81,26 @@ const Conversation = () => {
       if (userMessages) {
         setGetHistoryMessages(userMessages?.conversations);
       }
-      console.log(getHistoryMessages);
     } catch (err) {
+      if (err.response.status === 500) {
+        setErrorMessage('Please Check your network connection');
+        toast.error('Cannot get chat history', {
+          theme: 'dark',
+          autoClose: 6000,
+        });
+      }
       console.log(err);
+
       setIsHistoryLoading(false);
     } finally {
       setIsHistoryLoading(false);
     }
+  };
+
+  const handleProModal = (e) => {
+    e.preventDefault();
+
+    setProModal(true);
   };
 
   // const demoMessage = [
@@ -88,7 +120,13 @@ const Conversation = () => {
 
   return (
     <section className="relative h-screen w-full py-6 md:py-8 px-6 md:px-10 overflow-hidden">
-      <Sidebar currentPage={'Conversations'} />
+      {proModal && <ProModal />}
+      <Sidebar
+        currentPage={'Conversations'}
+        handleProModal={handleProModal}
+        rateLimit={rateLimit}
+        percentChanged={(100 * rateLimit) / TOTAL_LIMIT}
+      />
       <MobileSideBar
         iconColor={'bg-cyan-600'}
         currentPage={'Conversations'}
@@ -170,6 +208,7 @@ const Conversation = () => {
             messageArr={getHistoryMessages}
             isHistoryLoading={isHistoryLoading}
             textColor={'text-cyan-500'}
+            errorMessage={errorMessage}
           />
         )}
       </div>
