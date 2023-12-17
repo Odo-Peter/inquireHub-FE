@@ -24,12 +24,12 @@ const Conversation = () => {
 
   const [user, setUser] = useState(null);
   const [getHistoryMessages, setGetHistoryMessages] = useState(null);
+  const [rateLimit, setRateLimit] = useState(null);
 
   const [immediateResponse, setImmediateResponse] = useState([]);
 
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [rateLimit, setRateLimit] = useState(0);
 
   useEffect(() => {
     const currUser = window.localStorage.getItem('currentUser');
@@ -40,6 +40,15 @@ const Conversation = () => {
       setToken(user?.token);
     }
   }, []);
+
+  useEffect(() => {
+    const getRateLimit = async () => {
+      const userRateLimit = user ? await getUser(user?.id) : null;
+      return setRateLimit(userRateLimit ? userRateLimit?.rateLimit : null);
+    };
+
+    getRateLimit();
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -103,6 +112,13 @@ const Conversation = () => {
     setProModal(true);
   };
 
+  const handleCloseModal = (e) => {
+    e.preventDefault();
+
+    setProModal(false);
+    setBlur(false);
+  };
+
   // const demoMessage = [
   //   {
   //     id: 1,
@@ -119,19 +135,24 @@ const Conversation = () => {
   // ];
 
   return (
-    <section className="relative h-screen w-full py-6 md:py-8 px-6 md:px-10 overflow-hidden">
-      {proModal && <ProModal />}
+    <section className="relative h-screen w-full py-6 px-6 md:px-10 overflow-hidden">
+      {proModal && <ProModal closeModal={handleCloseModal} />}
       <Sidebar
         currentPage={'Conversations'}
         handleProModal={handleProModal}
         rateLimit={rateLimit}
         percentChanged={(100 * rateLimit) / TOTAL_LIMIT}
       />
-      <MobileSideBar
-        iconColor={'bg-cyan-600'}
-        currentPage={'Conversations'}
-        setBlur={setBlur}
-      />
+      {!proModal && (
+        <MobileSideBar
+          iconColor={'bg-cyan-600'}
+          currentPage={'Conversations'}
+          setBlur={setBlur}
+          handleProModal={handleProModal}
+          rateLimit={rateLimit}
+          percentChanged={(100 * rateLimit) / TOTAL_LIMIT}
+        />
+      )}
       <div
         className={
           blur
@@ -139,7 +160,7 @@ const Conversation = () => {
             : 'md:ml-72 flex flex-col gap-y-4'
         }
       >
-        <h1 className="text-lg md:text-2xl font-bold text-cyan-600 bg-cyan-600/10 py-3 md:py-4 justify-center flex items-center gap-4 rounded-lg border-x-4 border-cyan-600">
+        <h1 className="text-lg md:text-[1.2rem] font-bold text-cyan-600 bg-cyan-600/10 py-3 justify-center flex items-center gap-4 rounded-lg border-x-4 border-cyan-600">
           <MessageSquare /> Conversations
         </h1>
 
@@ -197,7 +218,7 @@ const Conversation = () => {
               lastText={message}
               textColor={'text-cyan-500'}
             />
-            <div className="absolute w-full border rounded-t-md bg-[#0a0a0a] border-gray-800 cursor-pointer opacity-95 hover:opacity-100 flex gap-x-4 items-center justify-center py-2 z-50 top-0 md:top-2 left-0">
+            <div className="absolute w-full border rounded-t-md bg-[#0a0a0a] border-gray-800 cursor-pointer opacity-95 hover:opacity-100 flex gap-x-4 items-center justify-center py-2 z-10 top-0 md:top-2 left-0">
               <ChatHistory
                 handleDisplayChatHistory={handleDisplayChatHistory}
               />

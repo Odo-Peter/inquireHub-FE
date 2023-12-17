@@ -1,18 +1,57 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { toast } from 'react-toastify';
 
 import { Loader2, LogOut, Settings as SettingsIcon, Smile } from 'lucide-react';
 
+import { getUser } from '../services/users';
+import { TOTAL_LIMIT } from '../utils/helperfuncs';
+
 import Sidebar from '../components/Sidebar';
 import MobileSidebar from '../components/MobileSidebar';
+import ProModal from '../components/ProModal';
 
 const Settings = () => {
   const [blur, setBlur] = useState(false);
+  const [proModal, setProModal] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+  const [user, setUser] = useState(null);
+  const [rateLimit, setRateLimit] = useState(null);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const currUser = window.localStorage.getItem('currentUser');
+
+    if (currUser) {
+      const user = JSON.parse(currUser);
+      setUser(user);
+    }
+  }, []);
+
+  useEffect(() => {
+    const getRateLimit = async () => {
+      const userRateLimit = user ? await getUser(user?.id) : null;
+      return setRateLimit(userRateLimit ? userRateLimit?.rateLimit : null);
+    };
+
+    getRateLimit();
+  }, [user]);
+
+  const handleProModal = (e) => {
+    e.preventDefault();
+
+    setProModal(true);
+  };
+
+  const handleCloseModal = (e) => {
+    e.preventDefault();
+
+    setProModal(false);
+    setBlur(false);
+  };
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -36,11 +75,21 @@ const Settings = () => {
 
   return (
     <section className="relative h-screen w-full py-6 md:py-8 px-6 md:px-10 overflow-hidden">
-      <Sidebar currentPage={'Settings'} />
+      {proModal && <ProModal closeModal={handleCloseModal} />}
+      <Sidebar
+        currentPage={'Settings'}
+        handleProModal={handleProModal}
+        rateLimit={rateLimit}
+        percentChanged={(100 * rateLimit) / TOTAL_LIMIT}
+      />
+
       <MobileSidebar
         iconColor={'bg-gray-600'}
         currentPage={'Settings'}
         setBlur={setBlur}
+        handleProModal={handleProModal}
+        rateLimit={rateLimit}
+        percentChanged={(100 * rateLimit) / TOTAL_LIMIT}
       />
       <div
         className={

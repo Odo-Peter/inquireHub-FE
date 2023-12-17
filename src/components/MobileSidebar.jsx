@@ -3,10 +3,18 @@ import { Link } from 'react-router-dom';
 
 import { Line } from 'rc-progress';
 
-import { MenuIcon, X, Zap } from 'lucide-react';
+import { Loader2, MenuIcon, X, Zap } from 'lucide-react';
 import { sideBarLinks } from '../utils/navlinks';
+import { TOTAL_LIMIT } from '../utils/helperfuncs';
 
-const MobileSidebar = ({ iconColor, currentPage, setBlur }) => {
+const MobileSidebar = ({
+  iconColor,
+  currentPage,
+  setBlur,
+  handleProModal,
+  percentChanged,
+  rateLimit,
+}) => {
   const [clicked, setClicked] = useState(false);
 
   const handleCloseSideBar = () => {
@@ -73,18 +81,27 @@ const MobileSidebar = ({ iconColor, currentPage, setBlur }) => {
             <div className="mt-8 flex flex-col gap-y-4">
               <div className="flex flex-col items-center gap-y-2">
                 <Line
-                  percent={75}
+                  percent={percentChanged}
                   strokeLinecap="round"
-                  strokeWidth={4}
-                  trailWidth={4}
+                  strokeWidth={3}
+                  trailWidth={3}
                   strokeColor="rgb(212, 56, 236)"
                   trailColor="#979393"
                 />
-                <p className="text-sm font-medium text-gray-300">
-                  Free usage: 10 / 20
+                <p className="text-sm flex items-center gap-x-2 font-medium text-gray-300">
+                  Free usage:{' '}
+                  {rateLimit || rateLimit === 0 ? (
+                    rateLimit
+                  ) : (
+                    <Loader2 className="w-3 h-3 text-fuchsia-500 animate-spin" />
+                  )}{' '}
+                  / {TOTAL_LIMIT}
                 </p>
               </div>
-              <button className="border-0 outline-none bg-gradient-to-r from-blue-500 to-pink-500 text-white text-sm font-semibold flex items-center gap-2 py-2 w-full justify-center rounded-full hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500 transition-all">
+              <button
+                onClick={handleProModal}
+                className="border-0 outline-none bg-gradient-to-r from-blue-500 to-pink-500 text-white text-sm font-semibold flex items-center gap-2 py-2 w-full justify-center rounded-full hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500 transition-all"
+              >
                 Subscribe to Pro <Zap className="h-4 w-4 fill-yellow-500" />{' '}
               </button>
             </div>

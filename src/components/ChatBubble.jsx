@@ -7,7 +7,7 @@ import user from '../assets/hacker.png';
 
 const ChatBubble = ({ messageArr, isLoading, lastText, textColor }) => {
   return (
-    <div className="border border-gray-800 overflow-auto md:h-[55vh] h-[58vh] pb-4 md:pb-6 md:mt-2 rounded-md">
+    <div className="border border-gray-800 overflow-auto md:h-[60vh] h-[58vh] pb-4 md:pb-6 md:mt-2 rounded-md">
       {!messageArr || messageArr.length === 0 ? (
         <div className="h-full w-full flex flex-col items-center justify-center gap-y-2">
           <SmilePlus className={`h-16 w-16 animate-bounce ${textColor}`} />
@@ -39,12 +39,12 @@ const ChatBubble = ({ messageArr, isLoading, lastText, textColor }) => {
                             alt="bot"
                             className="h-5 w-5 md:h-8 md:w-8"
                           />
-                          <div className="ai bg-gradient-to-r from-slate-700 to-slate-800 px-2 md:px-3 py-3 text-sm leading-relaxed">
+                          <div className="ai bg-gradient-to-r from-slate-700 to-slate-800 px-2 md:px-3 py-3 text-sm leading-relaxed whitespace-pre-wrap">
                             {isLoading && !msg.response ? (
                               <>
                                 <p className="flex items-center gap-x-2">
                                   Getting response...{' '}
-                                  <LoaderIcon className="h-4 w-4 text-white animate-spin" />{' '}
+                                  <LoaderIcon className="h-4 w-4 text-white animate-spin " />{' '}
                                 </p>
                               </>
                             ) : (

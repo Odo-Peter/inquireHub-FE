@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 
 import { Line } from 'rc-progress';
 
+import { Loader2, Zap } from 'lucide-react';
+
 import { sideBarLinks } from '../utils/navlinks';
-import { Zap } from 'lucide-react';
+import { TOTAL_LIMIT } from '../utils/helperfuncs';
 
 const Sidebar = ({
   currentPage,
@@ -56,7 +58,13 @@ const Sidebar = ({
             trailColor="#979393"
           />
           <p className="text-sm flex items-center gap-x-2 font-medium text-gray-300">
-            Free usage: {rateLimit} / 2
+            Free usage:{' '}
+            {rateLimit || rateLimit === 0 ? (
+              rateLimit
+            ) : (
+              <Loader2 className="w-3 h-3 text-fuchsia-500 animate-spin" />
+            )}{' '}
+            / {TOTAL_LIMIT}
           </p>
         </div>
         <button

@@ -11,7 +11,6 @@ export const getAssistantResponseArticle = async (message) => {
   const config = {
     headers: { Authorization: token },
   };
-  console.log(token);
   const response = await axios.post(BASE_URL, message, config);
   return response.data;
 };

@@ -6,20 +6,25 @@ import { toast } from 'react-toastify';
 import { getUser } from '../services/users';
 import { getAssistantResponseArticle, setToken } from '../services/articles';
 
+import { TOTAL_LIMIT } from '../utils/helperfuncs';
+
 import Sidebar from '../components/Sidebar';
 import MobileSidebar from '../components/MobileSidebar';
 import ChatBubble from '../components/ChatBubble';
 import HistoryBubble from '../components/HistoryBubble';
 import ChatHistory from '../components/ChatHistory';
+import ProModal from '../components/ProModal';
 
 const Article = () => {
   const [blur, setBlur] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [getHistory, setGetHistory] = useState(false);
   const [isHistoryLoading, setIsHistoryLoading] = useState(false);
+  const [proModal, setProModal] = useState(false);
 
   const [user, setUser] = useState(null);
   const [getHistoryMessages, setGetHistoryMessages] = useState(null);
+  const [rateLimit, setRateLimit] = useState(null);
 
   const [immediateResponse, setImmediateResponse] = useState([]);
   const [message, setMessage] = useState('');
@@ -35,6 +40,15 @@ const Article = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const getRateLimit = async () => {
+      const userRateLimit = user ? await getUser(user?.id) : null;
+      return setRateLimit(userRateLimit ? userRateLimit?.rateLimit : null);
+    };
+
+    getRateLimit();
+  }, [user]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -43,7 +57,10 @@ const Article = () => {
     try {
       setIsLoading(true);
       const res = await getAssistantResponseArticle({ message });
+      const userRateLimit = user ? await getUser(user?.id) : null;
+
       setImmediateResponse([...immediateResponse, res]);
+      setRateLimit(userRateLimit?.rateLimit);
     } catch (err) {
       console.log(err);
       if (err.response.status === 500) {
@@ -51,6 +68,10 @@ const Article = () => {
           theme: 'dark',
           autoClose: 6000,
         });
+      }
+
+      if (err.response.status === 429) {
+        setProModal(true);
       }
       setIsLoading(false);
     } finally {
@@ -84,14 +105,39 @@ const Article = () => {
     }
   };
 
+  const handleProModal = (e) => {
+    e.preventDefault();
+
+    setProModal(true);
+  };
+
+  const handleCloseModal = (e) => {
+    e.preventDefault();
+
+    setProModal(false);
+    setBlur(false);
+  };
+
   return (
-    <section className="relative h-screen w-full py-6 md:py-8 px-6 md:px-10 overflow-hidden">
-      <Sidebar currentPage={'Article Generation'} />
-      <MobileSidebar
-        iconColor={'bg-fuchsia-600'}
+    <section className="relative h-screen w-full py-6 px-6 md:px-10 overflow-hidden">
+      {proModal && <ProModal closeModal={handleCloseModal} />}
+      <Sidebar
         currentPage={'Article Generation'}
-        setBlur={setBlur}
+        handleProModal={handleProModal}
+        rateLimit={rateLimit}
+        percentChanged={(100 * rateLimit) / TOTAL_LIMIT}
       />
+
+      {!proModal && (
+        <MobileSidebar
+          iconColor={'bg-fuchsia-600'}
+          currentPage={'Article Generation'}
+          setBlur={setBlur}
+          handleProModal={handleProModal}
+          rateLimit={rateLimit}
+          percentChanged={(100 * rateLimit) / TOTAL_LIMIT}
+        />
+      )}
       <div
         className={
           blur
@@ -99,7 +145,7 @@ const Article = () => {
             : 'md:ml-72 flex flex-col gap-y-4'
         }
       >
-        <h1 className="text-lg md:text-2xl font-bold text-fuchsia-600 bg-fuchsia-600/10 py-3 md:py-4 justify-center flex items-center gap-4 rounded-lg border-x-4 border-fuchsia-600">
+        <h1 className="text-lg md:text-[1.2rem] font-bold text-fuchsia-600 bg-fuchsia-600/10 py-3 justify-center flex items-center gap-4 rounded-lg border-x-4 border-fuchsia-600">
           <ScrollText /> Article Generation
         </h1>
 
@@ -156,7 +202,7 @@ const Article = () => {
               lastText={message}
               textColor={'text-fuchsia-600'}
             />
-            <div className="absolute w-full border rounded-t-md bg-[#0a0a0a] border-gray-800 cursor-pointer opacity-95 hover:opacity-100 flex gap-x-4 items-center justify-center py-2 z-50 top-0 md:top-2 left-0">
+            <div className="absolute w-full border rounded-t-md bg-[#0a0a0a] border-gray-800 cursor-pointer opacity-95 hover:opacity-100 flex gap-x-4 items-center justify-center py-2 z-10 top-0 md:top-2 left-0">
               <ChatHistory
                 handleDisplayChatHistory={handleDisplayChatHistory}
               />

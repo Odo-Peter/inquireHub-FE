@@ -13,4 +13,4 @@ export const navigateBackToAuth = (ms, elem) => {
   }, 1000);
 };
 
-export const TOTAL_LIMIT = 2;
+export const TOTAL_LIMIT = 5;

@@ -11,7 +11,7 @@ const HistoryBubble = ({
   errorMessage,
 }) => {
   return (
-    <div className="border border-gray-800 overflow-auto md:h-[55vh] h-[58vh] py-4 md:py-6 md:mt-2 rounded-md">
+    <div className="border border-gray-800 overflow-auto md:h-[60vh] h-[58vh] py-4 md:py-6 md:mt-2 rounded-md">
       {/* Maps all the archived data stored on the DB */}
 
       {/* Checks if its Loading and render a Loader */}
@@ -58,7 +58,7 @@ const HistoryBubble = ({
                             alt="bot"
                             className="h-5 w-5 md:h-8 md:w-8"
                           />
-                          <div className="ai bg-gradient-to-r from-slate-700 to-slate-800 px-2 md:px-3 py-3 text-sm leading-relaxed">
+                          <div className="ai bg-gradient-to-r from-slate-700 to-slate-800 px-2 md:px-3 py-3 text-sm whitespace-pre-wrap leading-relaxed">
                             {msg.response}
                           </div>
                         </div>
