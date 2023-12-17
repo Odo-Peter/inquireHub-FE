@@ -1,11 +1,13 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Line } from 'rc-progress';
-
 import { Loader2, Zap } from 'lucide-react';
 
+import { getUser } from '../services/users';
+
 import { sideBarLinks } from '../utils/navlinks';
-import { TOTAL_LIMIT } from '../utils/helperfuncs';
+import { toast } from 'react-toastify';
 
 const Sidebar = ({
   currentPage,
@@ -13,6 +15,37 @@ const Sidebar = ({
   percentChanged,
   rateLimit,
 }) => {
+  const [user, setUser] = useState(null);
+  const [maxRateLimit, setMaxRateLimit] = useState(null);
+
+  useEffect(() => {
+    const currUser = window.localStorage.getItem('currentUser');
+
+    if (currUser) {
+      const user = JSON.parse(currUser);
+      setUser(user);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      const getMaxRateLimit = async () => {
+        const userMaxRateLimit = user ? await getUser(user?.id) : null;
+        return setMaxRateLimit(
+          userMaxRateLimit ? userMaxRateLimit?.maxRateLimit : null
+        );
+      };
+
+      getMaxRateLimit();
+    } catch (err) {
+      toast.error('Connection Error, check newtork', {
+        theme: 'dark',
+        autoClose: 3000,
+      });
+      console.log(err);
+    }
+  }, [user]);
+
   return (
     <div className="hidden fixed top-0 left-0 md:flex flex-col h-full w-72 px-4 border-r border-gray-800 py-10 gap-y-12">
       <div className="flex flex-col items-center gap-y-2">
@@ -64,7 +97,7 @@ const Sidebar = ({
             ) : (
               <Loader2 className="w-3 h-3 text-fuchsia-500 animate-spin" />
             )}{' '}
-            / {TOTAL_LIMIT}
+            / {maxRateLimit ? maxRateLimit : 5}
           </p>
         </div>
         <button
