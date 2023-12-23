@@ -10,12 +10,12 @@ import user from '../assets/hacker.png';
 
 const CodeChatBubble = ({ messageArr, isLoading, lastText, textColor }) => {
   return (
-    <div className="border border-gray-800 overflow-auto md:h-[60vh] h-[58vh] pb-4 md:pb-6 md:mt-2 rounded-md">
+    <div className="border border-gray-800 overflow-auto md:h-[60vh] h-[58vh] pb-4 md:pb-6 md:mt-2 rounded-md scrollbar-thumb-gray-400 scrollbar-track-gray-600 scrollbar-thin">
       {!messageArr || messageArr.length === 0 ? (
         <div className="h-full w-full flex flex-col items-center justify-center gap-y-2">
           <SmilePlus className={`h-16 w-16 animate-bounce ${textColor}`} />
           <p className="text-sm text-gray-300">Enter a prompt to begin</p>
-          <p className="text-xs text-gray-400">Start enquiring...</p>
+          <p className="text-xs text-gray-400">Start Inquiring...</p>
         </div>
       ) : (
         <>

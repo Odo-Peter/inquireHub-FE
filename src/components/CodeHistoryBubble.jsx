@@ -14,7 +14,7 @@ const CodeHistoryBubble = ({
   errorMessage,
 }) => {
   return (
-    <div className="border border-gray-800 overflow-auto md:h-[60vh] h-[58vh] py-4 md:py-6 md:mt-2 rounded-md">
+    <div className="border border-gray-800 overflow-auto md:h-[60vh] h-[58vh] py-4 md:py-6 md:mt-2 rounded-md scrollbar-thumb-gray-400 scrollbar-track-gray-600 scrollbar-thin">
       {/* Maps all the archived data stored on the DB */}
 
       {/* Checks if its Loading and render a Loader */}

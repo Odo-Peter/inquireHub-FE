@@ -1,11 +1,9 @@
-import { Link } from 'react-router-dom';
-
 import { CheckCircle2, X } from 'lucide-react';
 import { subscriptionsPlans } from '../utils/pricing';
 
 const ProModal = ({ closeModal }) => {
   return (
-    <section className="absolute flex flex-col justify-center items-center w-full h-full py-8 px-10 md:px-20 lg:px-32 top-0 left-0 bg-[#0a0a0a] bg-opacity-90 z-50 overflow-auto md:overflow-hidden">
+    <section className="absolute flex flex-col justify-center items-center w-full h-full py-8 px-10 md:px-20 lg:px-32 top-0 left-0 bg-[#0a0a0a] bg-opacity-90 z-50 overflow-auto md:overflow-hidden transition-all">
       <div className="relative flex flex-col w-full h-full mt-[24rem] md:mt-0 md:flex-row items-center justify-center gap-8">
         {subscriptionsPlans.map((sub) => (
           <div
@@ -28,12 +26,9 @@ const ProModal = ({ closeModal }) => {
                 {feature}
               </p>
             ))}
-            <Link
-              to={'/auth/sign_in'}
-              className="w-full text-center rounded-full border border-cyan-700 hover:bg-gradient-to-r hover:from-blue-500 hover:to-pink-500 hover:border-slate-900 mt-6 transition-all outline-none text-sm py-2"
-            >
+            <button className="w-full text-center rounded-full border border-cyan-700 hover:bg-gradient-to-r hover:from-blue-500 hover:to-pink-500 hover:border-slate-900 mt-6 transition-all outline-none text-sm py-2">
               Choose Plan
-            </Link>
+            </button>
           </div>
         ))}
       </div>
