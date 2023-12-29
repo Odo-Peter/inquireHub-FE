@@ -15,3 +15,8 @@ export const getUser = async (id) => {
   const response = await axios.get(`${BASE_URL}/${id}`);
   return response.data;
 };
+
+export const updateUser = async (id, details) => {
+  const response = await axios.put(`${BASE_URL}/${id}`, details);
+  return response.data;
+};

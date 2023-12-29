@@ -183,7 +183,7 @@ const Article = () => {
             )}
           </button>
           <button
-            disabled={isLoading}
+            disabled={!message || isLoading}
             type="submit"
             className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 border-0 outline-none px-3 font-medium tracking-wide py-[5px] text-xs rounded-md bg-fuchsia-700 text-gray-100"
           >

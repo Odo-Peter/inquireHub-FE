@@ -49,17 +49,17 @@ export const subscriptionsPlans = [
       'Access to customer care',
       'Access to new product releases',
     ],
-  },
-  {
-    title: 'Pro Plan',
-    description:
-      'Pro plan allows you to have a faster, enjoy the best conversation with our AI model, unlimited queries, for most users',
-    price: '19.99',
-    features: [
-      'Unlimited queries per user',
-      'Super fast response time',
-      'Access to customer care',
-      'Access to new product releases',
-    ],
+    // },
+    // {
+    //   title: 'Pro Plan',
+    //   description:
+    //     'Pro plan allows you to have a faster, enjoy the best conversation with our AI model, unlimited queries, for most users',
+    //   price: '19.99',
+    //   features: [
+    //     'Unlimited queries per user',
+    //     'Super fast response time',
+    //     'Access to customer care',
+    //     'Access to new product releases',
+    //   ],
   },
 ];
