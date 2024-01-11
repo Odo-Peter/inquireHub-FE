@@ -13,5 +13,6 @@ export const subscribeToPro = async (credentials) => {
   };
   const response = await axios.post(BASE_URL, credentials, config);
 
+  // console.log(response);
   return response.data;
 };

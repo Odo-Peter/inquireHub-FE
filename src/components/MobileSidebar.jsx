@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Line } from 'rc-progress';
-
 import { Loader2, MenuIcon, X, Zap } from 'lucide-react';
+import { toast } from 'react-toastify';
+
+import { getUser } from '../services/users';
+
 import { sideBarLinks } from '../utils/navlinks';
-import { TOTAL_LIMIT } from '../utils/helperfuncs';
 
 const MobileSidebar = ({
   iconColor,
@@ -16,6 +18,37 @@ const MobileSidebar = ({
   rateLimit,
 }) => {
   const [clicked, setClicked] = useState(false);
+  const [user, setUser] = useState(null);
+  const [maxRateLimit, setMaxRateLimit] = useState(null);
+
+  useEffect(() => {
+    const currUser = window.localStorage.getItem('currentUser');
+
+    if (currUser) {
+      const user = JSON.parse(currUser);
+      setUser(user);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      const getMaxRateLimit = async () => {
+        const userMaxRateLimit = user ? await getUser(user?.id) : null;
+        // console.log(userMaxRateLimit);
+        return setMaxRateLimit(
+          userMaxRateLimit ? userMaxRateLimit?.maxRateLimit : null
+        );
+      };
+
+      getMaxRateLimit();
+    } catch (err) {
+      toast.error('Connection Error, check newtork', {
+        theme: 'dark',
+        autoClose: 3000,
+      });
+      console.log(err);
+    }
+  }, [user]);
 
   const handleCloseSideBar = () => {
     setClicked(false);
@@ -95,7 +128,7 @@ const MobileSidebar = ({
                   ) : (
                     <Loader2 className="w-3 h-3 text-fuchsia-500 animate-spin" />
                   )}{' '}
-                  / {TOTAL_LIMIT}
+                  / {maxRateLimit ? maxRateLimit : 5}
                 </p>
               </div>
               <button

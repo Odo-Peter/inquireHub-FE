@@ -41,8 +41,8 @@ export const subscriptionsPlans = [
   {
     title: 'Popular Plan',
     description:
-      'Popular plan allows you to have a better conversation with our AI model, with a higher queries limit, for most users',
-    price: '9.99',
+      'Popular plan allows you to have a better conversation with our AI model, with a higher queries limit, recommended for most users',
+    price: '2000 NGN',
     features: [
       'Total of 100 queries per user',
       'Faster range response time',

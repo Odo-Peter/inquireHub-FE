@@ -31,6 +31,7 @@ const Sidebar = ({
     try {
       const getMaxRateLimit = async () => {
         const userMaxRateLimit = user ? await getUser(user?.id) : null;
+        // console.log(userMaxRateLimit);
         return setMaxRateLimit(
           userMaxRateLimit ? userMaxRateLimit?.maxRateLimit : null
         );
@@ -91,7 +92,7 @@ const Sidebar = ({
             trailColor="#979393"
           />
           <p className="text-sm flex items-center gap-x-2 font-medium text-gray-300">
-            Free usage:{' '}
+            {maxRateLimit !== 10 ? 'Free usage:' : 'Pro usage:'}{' '}
             {rateLimit || rateLimit === 0 ? (
               rateLimit
             ) : (
@@ -100,12 +101,15 @@ const Sidebar = ({
             / {maxRateLimit ? maxRateLimit : 5}
           </p>
         </div>
-        <button
-          onClick={handleProModal}
-          className="border-0 outline-none bg-gradient-to-r from-blue-500 to-pink-500 text-white text-sm font-semibold flex items-center gap-2 py-2 w-full justify-center rounded-full hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500 transition-all"
-        >
-          Subscribe to Pro <Zap className="h-4 w-4 fill-yellow-500" />{' '}
-        </button>
+
+        {maxRateLimit !== 10 && (
+          <button
+            onClick={handleProModal}
+            className="border-0 outline-none bg-gradient-to-r from-blue-500 to-pink-500 text-white text-sm font-semibold flex items-center gap-2 py-2 w-full justify-center rounded-full hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500 transition-all"
+          >
+            Subscribe to Pro <Zap className="h-4 w-4 fill-yellow-500" />{' '}
+          </button>
+        )}
       </div>
     </div>
   );
