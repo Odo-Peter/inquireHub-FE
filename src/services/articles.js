@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = '/api/articles';
+const BASE_URL = 'https://inquirehub-hkk4.onrender.com/api/articles';
 
 let token = null;
 
